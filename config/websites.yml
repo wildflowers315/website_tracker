@@ -1,0 +1,44 @@
+# Example website tracking configuration
+
+websites:
+  - name: "UNFCCC"
+    url: "https://unfccc.int/secretariat/employment/recruitment"
+    frequency: "hourly"
+    content:
+      selectors:
+        - "[id*='job']"            # Elements with 'job' in their ID
+        - "[class*='job']"         # Elements with 'job' in their class
+        - "[id*='vacancy']"        # Elements with 'vacancy' in their ID
+        - "[class*='vacancy']"     # Elements with 'vacancy' in their class
+        - "[id*='position']"       # Elements with 'position' in their ID
+        - "[class*='position']"    # Elements with 'position' in their class
+        - "a[href*='job']"         # Links containing 'job' in URL
+        - "a[href*='vacancy']"     # Links containing 'vacancy' in URL
+        - "a[href*='career']"      # Links containing 'career' in URL
+        - ".content h1, .content h2, .content h3"  # Main content headings
+        - ".main-content"          # Main content area
+      exclude:
+        - ".advertisement"
+        - ".sidebar"
+        - ".footer"
+        - ".navigation"
+        - ".header"
+    notification:
+      threshold: 
+        added: 1      # Notify if at least 1 new job
+        removed: 1    # Notify if at least 1 job removed
+        changed: 0.05  # 5% content change threshold
+      email:
+        to: "${DEFAULT_EMAIL_RECIPIENTS}"  # Use environment variable or reference global config
+
+email:
+  service: "gmail"
+  credentials:
+    client_id: "${GMAIL_CLIENT_ID}"
+    client_secret: "${GMAIL_CLIENT_SECRET}"
+    refresh_token: "${GMAIL_REFRESH_TOKEN}"
+  from: "${GMAIL_FROM_EMAIL}"
+  batch_interval: 604800 # Combine notifications within 1 hour (3600), 1 day (86400), 1 week (604800)
+  rate_limit:
+    max_emails: 5    # Maximum emails per period
+    period: 604800    # Period in seconds (1 hour (3600), 1 day (86400), 1 week (604800)

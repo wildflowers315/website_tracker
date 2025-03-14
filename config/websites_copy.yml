@@ -1,0 +1,49 @@
+# Example website tracking configuration
+
+websites:
+  - name: "Example Job Board"
+    url: "https://example.com/jobs"
+    frequency: "hourly"
+    content:
+      selectors:
+        - ".job-listing"
+        - ".job-description"
+      exclude:
+        - ".advertisement"
+    notification:
+      threshold: 
+        added: 1      # Notify if at least 1 new job
+        removed: 1    # Notify if at least 1 job removed
+        changed: 0.3  # 30% content change threshold
+      email:
+        to: ["your-email@example.com"]
+
+  - name: "Company Careers"
+    url: "https://company.com/careers"
+    frequency: "daily"
+    content:
+      selectors:
+        - "#job-openings"
+        - ".position-details"
+      exclude:
+        - ".sidebar"
+        - ".footer"
+    notification:
+      threshold:
+        added: 1
+        removed: 1
+        changed: 0.2
+      email:
+        to: ["hr@company.com", "manager@company.com"]
+
+email:
+  service: "gmail"
+  credentials:
+    client_id: "${GMAIL_CLIENT_ID}"
+    client_secret: "${GMAIL_CLIENT_SECRET}"
+    refresh_token: "${GMAIL_REFRESH_TOKEN}"
+  from: "${GMAIL_FROM_EMAIL}"
+  batch_interval: 3600  # Combine notifications within 1 hour
+  rate_limit:
+    max_emails: 50    # Maximum emails per period
+    period: 3600      # Period in seconds (1 hour)
